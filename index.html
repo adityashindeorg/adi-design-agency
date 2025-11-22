@@ -312,14 +312,6 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
 </head>
 <body>
 
-<form name="contact" netlify netlify-honeypot="bot-field" hidden>
-  <input type="text" name="Project Type" />
-  <input type="text" name="Budget Range" />
-  <input type="text" name="Deadline" />
-  <input type="text" name="Client Name" />
-  <input type="text" name="Mobile" />
-</form>
-
 <nav aria-label="Primary">
   <div class="nav-inner wrap">
     <div class="logo"><div class="mark">A</div>ADI DESIGN</div>
@@ -560,8 +552,9 @@ addEventListener('pointermove', e=>{$('.ribbon-inner').style.transform=`translat
   ];
   let idx=0, lock=false;
   const sec=$('#process'), k=$('#procKicker'), t=$('#procTitle'), l=$('#procLead'), c=$('#procCtaRow'), bdg=$('#procBadge'), d=[...document.querySelectorAll(".proc-dot")];
-  const img1 = $('#procImg1'); const img2 = $('#procImg2');
-  let activeImg = 1;
+  const img1 = $('#procImg1');
+  const img2 = $('#procImg2');
+  let activeImg = 1; // 1 means img1 active, 2 means img2 active
   
   function setStage(i){
     lock=true;
@@ -572,11 +565,13 @@ addEventListener('pointermove', e=>{$('.ribbon-inner').style.transform=`translat
       if(k)k.textContent=STAGES[i].k; if(t)t.textContent=STAGES[i].t; if(l)l.textContent=STAGES[i].l; if(bdg)bdg.textContent=STAGES[i].b;
       sec.style.background=STAGES[i].bg;
       nextImg.src = STAGES[i].img;
-      nextImg.style.zIndex = 2; currImg.style.zIndex = 1;
+      nextImg.style.zIndex = 2;
+      currImg.style.zIndex = 1;
       requestAnimationFrame(()=>{
         nextImg.classList.add('active');
         setTimeout(()=>{
-          currImg.classList.remove('active'); currImg.style.zIndex = 1;
+          currImg.classList.remove('active'); 
+          currImg.style.zIndex = 1;
           [k,t,l,c,bdg].forEach(e=>e?.classList.add("active"));
           lock=false;
         }, 200);
@@ -590,7 +585,7 @@ addEventListener('pointermove', e=>{$('.ribbon-inner').style.transform=`translat
   setStage(0);
 })();
 
-/* --- 6. GLASS WIZARD LOGIC --- */
+/* --- 6. GLASS WIZARD LOGIC + FORMSUBMIT (UNLIMITED FREE) --- */
 let wizStep = 1;
 let wizData = {type:null, budget:null, deadline:null, name:null, phone:null};
 const overlay = $('#modalOverlay');
@@ -599,12 +594,8 @@ const dashes = {1:$('#dash1'),2:$('#dash2'),3:$('#dash3'),4:$('#dash4')};
 const pBar = $('#progressBar');
 const sView = $('#successView');
 
-// Helper for Netlify Form
-function encode(data) {
-  return Object.keys(data)
-    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-    .join("&");
-}
+// Configure FormSubmit Endpoint
+const FORM_ENDPOINT = "https://formsubmit.co/ajax/adityashindeorgx@gmail.com"; 
 
 function openWizard(){
   wizStep=1; wizData={type:null,budget:null,deadline:null,name:null,phone:null};
@@ -627,9 +618,7 @@ window.wizNext = function(target, val){
   if(wizStep===1) wizData.type=val;
   if(wizStep===2) wizData.budget=val;
   if(wizStep===3) wizData.deadline=val;
-  
-  const curr = steps[wizStep];
-  curr.style.opacity='0'; curr.style.transform='translateY(-10px)';
+  const curr = steps[wizStep]; curr.style.opacity='0'; curr.style.transform='translateY(-10px)';
   setTimeout(()=>{
     curr.style.display='none'; curr.classList.remove('active');
     wizStep = target;
@@ -643,8 +632,7 @@ window.wizNext = function(target, val){
 
 window.wizPrev = function(target){
   dashes[wizStep].classList.remove('active');
-  const curr = steps[wizStep];
-  curr.style.opacity='0'; curr.style.transform='translateY(10px)';
+  const curr = steps[wizStep]; curr.style.opacity='0'; curr.style.transform='translateY(10px)';
   setTimeout(()=>{
     curr.style.display='none'; curr.classList.remove('active');
     wizStep = target;
@@ -659,27 +647,28 @@ window.wizFinish = function(){
   const name = $('#wizName').value;
   const phone = $('#wizPhone').value;
   if(!name || !phone) { alert('Please enter your Name and Mobile Number.'); return; }
+  wizData.name = name; wizData.phone = phone;
   
-  wizData.name = name;
-  wizData.phone = phone;
+  const curr = steps[4]; curr.style.opacity='0'; pBar.style.opacity='0';
   
-  const curr = steps[4];
-  curr.style.opacity='0'; pBar.style.opacity='0';
-  
-  fetch("/", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: encode({
-      "form-name": "contact",
-      "Project Type": wizData.type,
-      "Budget Range": wizData.budget,
-      "Deadline": wizData.deadline,
-      "Client Name": wizData.name,
-      "Mobile": wizData.phone
-    })
+  fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+          _subject: "New Project Request (ADI DESIGN)",
+          "Project Type": wizData.type,
+          "Budget Range": wizData.budget,
+          "Deadline": wizData.deadline,
+          "Client Name": wizData.name,
+          "Mobile Number": wizData.phone
+      })
   })
-  .then(() => console.log("Netlify Form Submitted"))
-  .catch(error => console.log("Error", error));
+  .then(response => response.json())
+  .then(data => console.log("Form submitted"))
+  .catch(error => console.log(error));
 
   setTimeout(()=>{
     curr.style.display='none'; curr.classList.remove('active');
