@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ADI DESIGN — Full Stack Agency</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =========================
+   THEME VARIABLES + BASE
+   ========================= */
+:root{
+  --bg-1:#07104f;          /* deep electric blue */
+  --bg-2:#0b1280;
+  --neon:#d9ff1a;          /* lime */
+  --neon-2:#b8ff5a;
+  --accent-purple:#5c32ff;
+  --card-dark:#0e0e10;
+  --muted:#cfe0ff;
+  --max:1200px;
+  --radius:12px;
+  --ease:cubic-bezier(.2,.9,.3,1);
+  --game-ease:cubic-bezier(.12,.92,.28,1.02);
+  
+  /* PROCESS VARIABLES */
+  --proc-neon:#b8ff39;
+  --proc-neon2:#d9ff1a;
+  --proc-ease: cubic-bezier(.22,.9,.35,1);
+
+  /* WIZARD VARIABLES */
+  --wiz-bg: rgba(20, 20, 30, 0.75);
+  --wiz-border: rgba(255, 255, 255, 0.1);
+  --wiz-neon: #2ecc71;
+  --wiz-icon-bg: rgba(46, 204, 113, 0.15);
+}
+
+/* Reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  background:linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 60%);
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-y:overlay;
+  line-height:1.4;
+  scroll-behavior: smooth;
+}
+body.modal-open { overflow: hidden; }
+
+/* utilities */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+.row{display:flex;gap:12px;align-items:center}
+.center{display:grid;place-items:center}
+.small{font-size:13px;color:var(--muted);opacity:.95}
+
+/* =========================
+   NAV
+   ========================= */
+nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
+.nav-inner{max-width:var(--max);margin:0 auto;padding:0 22px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;gap:10px;align-items:center;font-family:Montserrat;font-weight:900}
+.logo .mark{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--neon),var(--neon-2));display:grid;place-items:center;color:#051;font-weight:900}
+.navlinks{display:flex;gap:18px;align-items:center}
+.navlinks a{color:rgba(255,255,255,0.95);font-weight:700;text-decoration:none}
+.cta-small{background:var(--neon);color:#051;padding:8px 12px;border-radius:8px;font-weight:800;border:none;cursor:pointer;text-decoration: none;}
+
+/* =========================
+   HERO
+   ========================= */
+.hero{position:relative;padding:120px 0 60px;overflow:visible;min-height:620px}
+.hero-grid{display:grid;grid-template-columns:1fr 560px;gap:34px;align-items:center;max-width:var(--max);margin:0 auto;padding:0 22px;position:relative;z-index:10}
+
+.stats-vertical{position:absolute;left:-140px;top:60px;display:flex;flex-direction:column;gap:18px}
+.stat-col{min-width:120px;padding:6px 10px;border-radius:6px;font-weight:800;background:transparent}
+.stat-col .num{font-size:20px;color:var(--neon);display:block}
+.stat-col small{display:block;color:#cfe0ff;font-weight:700;opacity:.95;font-size:12px}
+
+.team{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.avatars{display:flex;gap:8px}
+.avatars img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,0.06)}
+
+.hero-title{
+  font-family:Montserrat, sans-serif;
+  font-size:120px;line-height:0.78;
+  font-weight:900;color:var(--neon);text-transform:uppercase;letter-spacing:-3px;
+  text-shadow:0 8px 30px rgba(0,0,0,0.45);
+  transition:transform .22s var(--ease);
+}
+
+.hero-sub{margin-top:14px;max-width:560px;color:#d8eaff;font-size:15px}
+.hero-cta{margin-top:18px;display:flex;gap:12px;align-items:center}
+.btn-primary{background:linear-gradient(90deg,var(--neon),var(--neon-2));color:#051;padding:14px 18px;border-radius:10px;font-weight:900;border:none;cursor:pointer;box-shadow:0 18px 36px rgba(0,0,0,0.45); text-decoration: none; display: inline-block;}
+.btn-ghost{background:transparent;border:2px solid rgba(255,255,255,0.06);padding:12px 16px;border-radius:10px;color:#fff; cursor: pointer; text-decoration: none; display: inline-block;}
+
+.play{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,0.12);border:2px solid rgba(255,255,255,0.04);cursor:pointer}
+
+/* HERO IMAGE */
+.hero-figure{width:100%;height:520px;border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(180deg,#220b6a,#1a0b4d);box-shadow:0 40px 90px rgba(2,6,40,0.6)}
+.hero-figure .photo{
+  position:absolute;inset:0;background-position:center;background-size:cover;
+  filter:contrast(.95) saturate(1.05);
+  background-image:url('main.png');
+}
+
+.hero-mini{position:absolute;left:18px;bottom:18px;right:18px;height:70px;background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(0,0,0,0.05));border-radius:12px;padding:10px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(1px)}
+
+.ribbon{margin-top:28px;transform:skewY(-4deg);overflow:visible}
+.ribbon-inner{background:linear-gradient(90deg,var(--neon),var(--neon-2));color:#051;font-family:Montserrat;font-weight:900;padding:14px 0;text-align:center;letter-spacing:2px;border-radius:6px;box-shadow:0 14px 40px rgba(0,0,0,0.35)}
+
+/* =========================
+   DARK SERVICES
+   ========================= */
+.section-dark{background:#151517;padding:60px 0 80px;margin-top:36px}
+.dark-wrap{max-width:var(--max);margin:0 auto;padding:0 22px;color:#fff}
+.what-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.tag-dot{width:12px;height:12px;border-radius:4px;background:var(--neon);box-shadow:0 6px 18px rgba(217,255,26,0.08);animation:dotPulse 2.2s infinite}
+@keyframes dotPulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.18);opacity:.85}100%{transform:scale(1);opacity:1}}
+.what-title{font-family:Montserrat;font-weight:900;font-size:32px;line-height:1.15;margin-bottom:20px;text-transform:uppercase}
+.expert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;align-items:stretch;z-index:2;position:relative}
+.card-expert{background:linear-gradient(180deg,#0c0c0e,#0e0e10);padding:18px;border-radius:12px;border:2px solid rgba(255,255,255,0.03);box-shadow:0 26px 60px rgba(0,0,0,0.6);overflow:hidden;transform-origin:center;transition:transform .36s var(--game-ease), box-shadow .36s var(--game-ease), border-color .36s}
+.card-thumb{height:160px;border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:inset 0 0 28px rgba(0,0,0,0.25)}
+.card-title{font-family:Montserrat;font-weight:900;margin-bottom:8px}
+.card-desc{color:#b8c9dd;font-size:14px;line-height:1.45;margin-bottom:14px}
+.circle-btn{width:48px;height:48px;border-radius:50%;background:linear-gradient(90deg,var(--neon),var(--neon-2));display:grid;place-items:center;cursor:pointer;border:none;transition:transform .18s}
+.circle-btn:hover{transform:scale(1.06)}
+.card-center{background:linear-gradient(180deg,var(--accent-purple),#4a22ff);border:2px solid rgba(255,255,255,0.06);box-shadow:0 36px 120px rgba(92,50,255,0.14), 0 6px 20px rgba(0,0,0,0.6);transform:translateY(-6px);animation:floaty 5s ease-in-out infinite;}
+@keyframes floaty{0%{transform:translateY(-6px)}50%{transform:translateY(-12px)}100%{transform:translateY(-6px)}}
+.reveal-up{opacity:0;transform:translateY(22px) scale(.99)}
+.revealed{opacity:1;transform:translateY(0) scale(1);transition:all .68s var(--game-ease)}
+.card-expert:hover{transform:translateY(-12px);border-color:var(--neon);box-shadow:0 50px 140px rgba(0,0,0,0.6),0 0 36px rgba(217,255,26,0.06)}
+.card-center .circle-btn{background:linear-gradient(90deg,#fff3,#ffef);color:#051}
+.circle-btn svg{transition:transform .28s}
+.circle-btn:hover svg{transform:rotate(20deg) translateY(-2px)}
+.ripple{position:relative;overflow:hidden;}
+.ripple::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(217,255,26,0.0);transition:box-shadow .5s}
+.ripple:active::after{box-shadow:0 0 60px 10px rgba(217,255,26,0.08);transition:box-shadow .12s}
+@media(max-width:1100px){.expert-grid{grid-template-columns:1fr 1fr;}.card-center{grid-column:1/-1;}}
+@media(max-width:720px){.hero-grid{grid-template-columns:1fr;}.hero-title{font-size:56px}.expert-grid{grid-template-columns:1fr}.stats-vertical{position:static;display:flex;flex-direction:row;gap:12px;margin-top:8px}}
+
+
+/* =========================
+   INTEGRATED SECTION: PROCESS (RECTANGLE)
+   ========================= */
+.process-section { position: relative; height: 850px; display: flex; align-items: center; justify-content: center; transition: background 900ms var(--proc-ease); background: var(--bg-1); overflow: hidden; margin-top: 0; }
+
+/* Modified Grid: Wider Card Column */
+.proc-wrap { 
+  width: 100%; max-width: 1200px; padding: 0 22px; 
+  display: grid; 
+  grid-template-columns: 1fr 600px; 
+  gap: 40px; align-items: center; position: relative; z-index: 2; 
+}
+
+.proc-kicker, .proc-title, .proc-lead, .proc-cta-row { opacity: 0; transform: translateY(20px); transition: all .6s var(--proc-ease); }
+.proc-kicker.active, .proc-title.active, .proc-lead.active, .proc-cta-row.active { opacity: 1; transform: none; }
+.proc-kicker { font-weight: 800; font-size: 13px; color: var(--proc-neon2); margin-bottom: 8px; letter-spacing: 1px; }
+.proc-title { font-family: Montserrat; font-size: 46px; font-weight: 900; text-transform: uppercase; margin: 0 0 10px; color: #fff; }
+.proc-lead { max-width: 480px; margin-bottom: 20px; color: #e8f3ff; line-height: 1.5; }
+.proc-cta-row { display: flex; gap: 12px; }
+.btn-proc-neon { background: linear-gradient(90deg, var(--proc-neon), var(--proc-neon2)); color: #051; padding: 12px 16px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; }
+.btn-proc-outline { border: 2px solid rgba(255,255,255,0.15); color: white; background: transparent; padding: 10px 14px; border-radius: 10px; cursor: pointer; }
+
+/* Modified Card Height */
+.proc-card-holder { height: 360px; position: relative; }
+.proc-card { width: 100%; height: 100%; background: #0d0e28; border-radius: 16px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.6); position: relative; }
+
+/* --- CROSS-FADE MORPH STYLES --- */
+.proc-img {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+.proc-img.active { opacity: 1; z-index: 2; }
+
+.proc-badge { position: absolute; bottom: 18px; left: 18px; padding: 8px 12px; background: rgba(255,255,255,.08); font-weight: 800; border-radius: 10px; backdrop-filter: blur(6px); opacity: 0; transform: translateY(10px); transition: all .6s var(--proc-ease); color: #fff; z-index: 5; }
+.proc-badge.active { opacity: 1; transform: none; }
+.proc-dots { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); display: flex; gap: 12px; flex-direction: column; z-index: 5; }
+.proc-dot { width: 12px; height: 12px; background: rgba(255,255,255,.22); border-radius: 50%; cursor: pointer; transition: background 0.3s; }
+.proc-dot.active { background: var(--proc-neon); }
+
+@media(max-width:720px){ 
+  .proc-wrap { grid-template-columns: 1fr; } 
+  .proc-card-holder { height: 260px; }
+  .proc-dots { display: none; } 
+}
+
+/* =========================
+   TAGLINE SECTION
+   ========================= */
+.tagline-section { padding: 120px 0 80px; text-align: center; background: transparent; position: relative; }
+.tagline-text { font-family: Montserrat, sans-serif; font-weight: 900; font-size: 56px; line-height: 1.1; color: var(--neon); text-transform: uppercase; letter-spacing: -2px; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+.tagline-sub { font-size: 18px; color: #dbe9ff; margin-bottom: 32px; opacity: 0.9; }
+@media(max-width: 720px) { .tagline-text { font-size: 36px; } }
+
+/* ===========================================
+   GLASS WIZARD OVERLAY STYLES
+   =========================================== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  display: none; /* Hidden by default */
+  align-items: center; justify-content: center;
+  animation: fadeInOverlay 0.3s ease;
+}
+.modal-overlay.open { display: flex; }
+@keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+
+/* The Glass Card Container */
+.wiz-card {
+  position: relative;
+  width: 100%; max-width: 440px; height: 650px;
+  background: var(--wiz-bg);
+  border: 1px solid var(--wiz-border);
+  border-top: 1px solid rgba(255,255,255,0.2);
+  border-radius: 32px;
+  padding: 40px 30px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.02);
+  overflow: hidden;
+  animation: slideUpCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes slideUpCard { from { transform: translateY(40px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+/* Close Button */
+.wiz-close {
+  position: absolute; top: 20px; right: 20px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: none; color: #fff; font-size: 20px;
+  display: grid; place-items: center; cursor: pointer;
+  transition: background 0.2s; z-index: 20;
+}
+.wiz-close:hover { background: rgba(255,255,255,0.2); }
+
+/* Progress Bar */
+.progress-container { display: flex; gap: 6px; justify-content: center; margin-bottom: 30px; }
+.dash { width: 25px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; transition: background 0.3s, box-shadow 0.3s; }
+.dash.active { background: var(--wiz-neon); box-shadow: 0 0 10px var(--wiz-neon); }
+
+/* Option List (Scrollable) */
+.options-list { display: flex; flex-direction: column; gap: 12px; flex: 1; overflow-y: auto; padding-right: 4px; }
+.options-list::-webkit-scrollbar { width: 4px; }
+.options-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+.option-row {
+  display: flex; align-items: center; padding: 14px; border-radius: 16px; cursor: pointer;
+  transition: all 0.2s ease; border: 1px solid transparent; background: rgba(255,255,255,0.01);
+}
+.option-row:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+.opt-icon-box {
+  width: 44px; height: 44px; border-radius: 12px; background: var(--wiz-icon-bg);
+  display: flex; align-items: center; justify-content: center; margin-right: 16px;
+  color: var(--wiz-neon); flex-shrink: 0;
+}
+.opt-icon-box svg { width: 22px; height: 22px; fill: currentColor; }
+
+.opt-content { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.opt-title { font-size: 15px; font-weight: 600; color: #fff; }
+.opt-desc { font-size: 12px; color: var(--text-grey); }
+
+.opt-arrow { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.2); transition: all 0.3s ease; }
+.option-row:hover .opt-arrow { color: #fff; transform: translateX(3px); }
+
+/* Inputs for Step 4 */
+.wiz-input {
+  width: 100%; padding: 16px; margin-bottom: 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; color: #fff; outline: none; font-family: inherit; font-size: 15px;
+  transition: all 0.2s;
+}
+.wiz-input::placeholder { color: rgba(255,255,255,0.4); }
+.wiz-input:focus { border-color: var(--wiz-neon); background: rgba(255,255,255,0.1); }
+
+.btn-submit {
+  width: 100%; padding: 16px; border-radius: 14px; border: none; font-family: inherit;
+  background: linear-gradient(90deg, var(--wiz-neon), #27ae60); color: #000; font-weight: 700;
+  font-size: 16px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(46,204,113,0.3); }
+
+/* Bottom Nav */
+.bottom-nav { margin-top: auto; display: flex; justify-content: space-between; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+.nav-btn { background: transparent; border: none; color: #999; padding: 10px 0; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+.nav-btn:hover { color: #fff; }
+.nav-btn svg { width: 16px; height: 16px; fill: currentColor; }
+.nav-btn.hidden { visibility: hidden; pointer-events: none; }
+
+/* Steps & Animation */
+.step-container { display: none; flex-direction: column; height: 100%; }
+.step-container.active { display: flex; animation: fadeInStep 0.4s ease; }
+.step-head { text-align: center; margin-bottom: 20px; }
+.step-head h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+.step-head p { font-size: 14px; color: #999; }
+
+@keyframes fadeInStep { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Success View */
+.success-container { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 20px; }
+.success-container.active { display: flex; animation: popIn 0.5s ease; }
+.success-icon { width: 80px; height: 80px; background: var(--wiz-neon); color: #000; border-radius: 50%; display: grid; place-items: center; margin-bottom: 24px; box-shadow: 0 0 30px var(--wiz-neon); }
+@keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+</style>
+</head>
+<body>
+
+<form name="contact" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="Project Type" />
+  <input type="text" name="Budget Range" />
+  <input type="text" name="Deadline" />
+  <input type="text" name="Client Name" />
+  <input type="text" name="Mobile" />
+</form>
+
+<nav aria-label="Primary">
+  <div class="nav-inner wrap">
+    <div class="logo"><div class="mark">A</div>ADI DESIGN</div>
+    <div class="navlinks">
+      <a href="#top">Home</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <button class="cta-small trigger-wizard">Start</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="top" aria-label="Hero">
+  <div class="hero-grid wrap">
+    <div style="position:relative;">
+      <div class="stats-vertical" aria-hidden="true">
+        <div class="stat-col"><span class="num" data-target="500">0</span><small>Happy Clients</small></div>
+        <div class="stat-col"><span class="num" data-target="125">0</span><small>Project Done</small></div>
+        <div class="stat-col"><span class="num" data-target="450">0</span><small>Media Features</small></div>
+      </div>
+      <div class="team">
+        <div class="avatars">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><rect rx='40' width='100%' height='100%' fill='%23ffd34d'/><text x='50%' y='54%' font-family='Montserrat' font-size='32' text-anchor='middle' fill='%23111'>A</text></svg>" alt="">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><rect rx='40' width='100%' height='100%' fill='%2390d8ff'/><text x='50%' y='54%' font-family='Montserrat' font-size='32' text-anchor='middle' fill='%23111'>D</text></svg>" alt="">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><rect rx='40' width='100%' height='100%' fill='%23a1ff6b'/><text x='50%' y='54%' font-family='Montserrat' font-size='32' text-anchor='middle' fill='%23111'>I</text></svg>" alt="">
+        </div>
+        <div style="margin-left:auto;font-weight:700;color:#dbe9ff">Consultancy — Idea → Launch</div>
+      </div>
+      <h1 class="hero-title">CREATIVE<br>AGENCY</h1>
+      <p class="hero-sub">ADI Design — a boutique full-stack web consultancy. We craft idea-first solutions: strategy, wireframes, Figma UI, pixel-perfect frontend, robust backend and reliable deployments.</p>
+      <div class="hero-cta">
+        <button class="btn-primary trigger-wizard">Start Project</button>
+        <a href="#services" class="btn-ghost">See Services</a>
+        <div class="play" title="Play demo"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"></path></svg></div>
+      </div>
+    </div>
+    <div class="hero-figure" id="heroFigure" aria-hidden="true">
+      <div class="photo"></div>
+      <div class="hero-mini">
+        <div style="width:44px;height:44;border-radius:8px;background:linear-gradient(90deg,var(--neon),#b8ff5a);display:grid;place-items:center;color:#051;font-weight:900">A</div>
+        <div style="flex:1">
+          <div style="font-weight:800">ADI DESIGN</div>
+          <div class="small">Idea → Wireframe → Figma → Dev → Deploy</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <a href="#services" class="btn-ghost">Explore</a>
+          <button class="btn-primary trigger-wizard" style="background:linear-gradient(90deg,var(--neon),#b8ff5a)">Request</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ribbon"><div class="ribbon-inner">BRANDING • GRAPHIC DESIGN • WEB DESIGN • DIGITAL MARKETING</div></div>
+</section>
+
+<section class="section-dark" id="services" aria-label="What we do - Expertise">
+  <div class="dark-wrap">
+    <div class="what-header">
+      <div style="display:flex;align-items:center;gap:10px"><div class="tag-dot" aria-hidden="true"></div><div style="font-weight:800;color:#dfefff">WHAT WE DO</div></div>
+      <button class="btn-ghost" style="border-color:#2b2b2d;color:#ccc">ALL SERVICES</button>
+    </div>
+    <h2 class="what-title">DESIGNING FOR SEAMLESS AND<br>ENJOYABLE INTERACTIONS.</h2>
+    <div class="expert-grid" id="expertGrid">
+      
+      <div class="card-expert reveal-up" data-animate onclick="window.open('https://directdesign.netlify.app', '_blank')" style="cursor:pointer">
+        <div class="card-thumb"><img src="1.png" style="width:100%;height:100%;object-fit:cover"></div>
+        <div class="card-title">BRAND BUILDING & STRATEGY.</div>
+        <div class="card-desc">We build dashboards, MIS systems, live tracking portals, and workflow tools for infrastructure operators.</div>
+        <div style="display:flex;justify-content:flex-end"><button class="circle-btn ripple"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#051" d="M8 5v14l11-7z"></path></svg></button></div>
+      </div>
+
+      <div class="card-expert card-center reveal-up" data-animate onclick="window.open('https://restrofy.netlify.app', '_blank')" style="cursor:pointer">
+        <div class="card-thumb"><img src="2.png" style="width:100%;height:100%;object-fit:cover"></div>
+        <div class="card-title" style="color:#fff">CREATIVE DIGITAL SOLUTION.</div>
+        <div class="card-desc" style="color:#f1eaff">We design and build complete food-delivery platforms: customer apps, partner apps, admin dashboards, routing & real-time tracking.</div>
+        <div style="display:flex;justify-content:flex-end"><button class="circle-btn ripple"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#051" d="M8 5v14l11-7z"></path></svg></button></div>
+      </div>
+
+      <div class="card-expert reveal-up" data-animate onclick="window.open('https://restrofy.netlify.app', '_blank')" style="cursor:pointer">
+        <div class="card-thumb"><img src="3.jpeg" style="width:100%;height:100%;object-fit:cover"></div>
+        <div class="card-title">MARKETING & CAMPAIGN.</div>
+        <div class="card-desc">From product architecture to UX, APIs, databases, dashboards, and integrations — complete end-to-end delivery.</div>
+        <div style="display:flex;justify-content:flex-end"><button class="circle-btn ripple"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#051" d="M8 5v14l11-7z"></path></svg></button></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="process-section" id="process">
+  <div class="proc-wrap">
+    <div>
+      <div class="proc-kicker" id="procKicker"></div>
+      <h1 class="proc-title" id="procTitle"></h1>
+      <p class="proc-lead" id="procLead"></p>
+      <div class="proc-cta-row" id="procCtaRow">
+        <button class="btn-proc-neon trigger-wizard">Start Phase</button>
+        <button class="btn-proc-outline">Learn More</button>
+      </div>
+    </div>
+    
+    <div class="proc-card-holder">
+      <div class="proc-card" id="procCard">
+        <img id="procImg1" class="proc-img active" src="3.png" alt="">
+        <img id="procImg2" class="proc-img" src="" alt="">
+        <div class="proc-badge" id="procBadge"></div>
+      </div>
+    </div>
+  </div>
+  <div class="proc-dots">
+    <div class="proc-dot active" data-i="0"></div>
+    <div class="proc-dot" data-i="1"></div>
+    <div class="proc-dot" data-i="2"></div>
+  </div>
+</section>
+
+<section class="tagline-section">
+  <div class="wrap">
+    <h2 class="tagline-text">YOUR VISION.<br>OUR CODE.<br>INFINITE POSSIBILITIES.</h2>
+    <p class="tagline-sub">Ready to build the future? Let's turn your ideas into reality.</p>
+    <button class="btn-primary trigger-wizard" style="font-size: 18px; padding: 16px 32px;">Get In Touch</button>
+  </div>
+</section>
+
+<footer style="margin-top:40px;padding-bottom:80px">
+  <div class="wrap" style="text-align:center;color:#b7c9ff">© 2025 ADI DESIGN — From idea to deployment</div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+  <div class="wiz-card">
+    <button class="wiz-close" id="closeWizard" aria-label="Close">×</button>
+    <div class="progress-container" id="progressBar">
+      <div class="dash active" id="dash1"></div>
+      <div class="dash" id="dash2"></div>
+      <div class="dash" id="dash3"></div>
+      <div class="dash" id="dash4"></div>
+    </div>
+
+    <div id="step1" class="step-container active">
+      <div class="step-head"><h2>Select Project Type</h2><p>Which digital solution do you need?</p></div>
+      <div class="options-list">
+        <div class="option-row" onclick="wizNext(2, 'Website')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div><div class="opt-content"><div class="opt-title">Website</div><div class="opt-desc">Corporate, Portfolio</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+        <div class="option-row" onclick="wizNext(2, 'Web App')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/></svg></div><div class="opt-content"><div class="opt-title">Web Application</div><div class="opt-desc">SaaS, Dashboard, Tool</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+        <div class="option-row" onclick="wizNext(2, 'E-commerce')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm0 10c-2.76 0-5-2.24-5-5h2c0 1.66 1.34 3 3 3s3-1.34 3-3h2c0 2.76-2.24 5-5 5z"/></svg></div><div class="opt-content"><div class="opt-title">E-commerce</div><div class="opt-desc">Shopify, Custom Cart</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+      </div>
+      <div class="bottom-nav"><button class="nav-btn hidden">Back</button></div>
+    </div>
+
+    <div id="step2" class="step-container">
+      <div class="step-head"><h2>Estimated Budget</h2><p>Fair pricing (INR)</p></div>
+      <div class="options-list">
+        <div class="option-row" onclick="wizNext(3, '₹5,000 - ₹30,000')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div><div class="opt-content"><div class="opt-title">Starter</div><div class="opt-desc">₹5,000 - ₹30,000</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+        <div class="option-row" onclick="wizNext(3, '₹30,000 - ₹1 Lakh')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg></div><div class="opt-content"><div class="opt-title">Business</div><div class="opt-desc">₹30,000 - ₹1 Lakh</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+        <div class="option-row" onclick="wizNext(3, '₹1 Lakh +')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99z"/></svg></div><div class="opt-content"><div class="opt-title">Enterprise</div><div class="opt-desc">₹1 Lakh +</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+      </div>
+      <div class="bottom-nav"><button class="nav-btn" onclick="wizPrev(1)"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L10.83 12l4.58 4.59L14 18l-6-6 6-6 1.41 1.41z"/></svg> Back</button></div>
+    </div>
+
+    <div id="step3" class="step-container">
+      <div class="step-head"><h2>Deadline</h2><p>When do you need this delivered?</p></div>
+      <div class="options-list">
+        <div class="option-row" onclick="wizNext(4, 'Urgent (< 1 mo)')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg></div><div class="opt-content"><div class="opt-title">Urgent</div><div class="opt-desc">&lt; 1 Month</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+        <div class="option-row" onclick="wizNext(4, 'Standard (1-3 mo)')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg></div><div class="opt-content"><div class="opt-title">Standard</div><div class="opt-desc">1 - 3 Months</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+        <div class="option-row" onclick="wizNext(4, 'Relaxed (3+ mo)')"><div class="opt-icon-box"><svg viewBox="0 0 24 24"><path d="M18.5 3H6c-1.1 0-2 .9-2 2v5.71c0 3.83 2.95 7.18 6.78 7.29 3.96.12 7.22-3.06 7.22-7v-1h.5c1.93 0 3.5-1.57 3.5-3.5S20.43 3 18.5 3zM16 5v3H6V5h10zm2.5 3H18V5h.5c.83 0 1.5.67 1.5 1.5S19.33 8 18.5 8zM2 21h20v-2H2v2z"/></svg></div><div class="opt-content"><div class="opt-title">Flexible</div><div class="opt-desc">3+ Months</div></div><div class="opt-arrow"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div></div>
+      </div>
+      <div class="bottom-nav"><button class="nav-btn" onclick="wizPrev(2)"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L10.83 12l4.58 4.59L14 18l-6-6 6-6 1.41 1.41z"/></svg> Back</button></div>
+    </div>
+
+    <div id="step4" class="step-container">
+      <div class="step-head"><h2>Almost Done</h2><p>How can we reach you?</p></div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:8px;">
+        <input class="wiz-input" id="wizName" type="text" placeholder="Your Name" required>
+        <input class="wiz-input" id="wizPhone" type="tel" placeholder="Mobile Number" required>
+        <button class="btn-submit" onclick="wizFinish()">Submit Request</button>
+      </div>
+      <div class="bottom-nav"><button class="nav-btn" onclick="wizPrev(3)"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L10.83 12l4.58 4.59L14 18l-6-6 6-6 1.41 1.41z"/></svg> Back</button></div>
+    </div>
+
+    <div id="successView" class="success-container">
+      <div class="success-icon"><svg style="width:40px;height:40px;fill:currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+      <h1>Thank You!</h1><p style="font-size:16px; margin-bottom:10px; color:#fff">Request Received</p><p style="font-size:14px; color:#999; max-width:300px; margin:0 auto;">We will analyze your requirements and reach out to you shortly.</p>
+      <button id="closeSuccess" style="margin-top:28px; background:var(--wiz-neon); color:#000; border:none; padding:12px 24px; border-radius:12px; font-weight:700; cursor:pointer;">Back to Site</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+
+/* --- 1. PARALLAX HERO --- */
+(function(){
+  const h = $('#heroFigure'), p = h?.querySelector('.photo'), t = $('.hero-title');
+  if(!h)return;
+  h.addEventListener('pointermove', e=>{
+    const r=h.getBoundingClientRect(), x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
+    h.style.transform=`perspective(1000px) rotateX(${clamp((y-.5)*6,-8,8)}deg) rotateY(${clamp((x-.5)*-8,-10,10)}deg)`;
+    p.style.transform=`translate3d(${clamp((x-.5)*-18,-30,30)}px,${clamp((y-.5)*-10,-18,18)}px,0) scale(1.03)`;
+    if(t) t.style.transform=`translateX(${(x-.5)*-3}px) translateY(${(y-.5)*2}px)`;
+  });
+  h.addEventListener('pointerleave', ()=>{
+    h.style.transform=''; p.style.transform=''; if(t) t.style.transform='';
+  });
+})();
+
+/* --- 2. COUNTERS --- */
+(function(){
+  const io=new IntersectionObserver(e=>{
+    e.forEach(x=>{
+      if(x.isIntersecting){
+        const el=x.target; if(el.d)return; el.d=1;
+        const t=+el.getAttribute('data-target')||0, s=performance.now(), i=+el.textContent||0;
+        const step=n=>{ const p=Math.min(1,(n-s)/1100); el.textContent=Math.round(i+(t-i)*(p<.5?2*p*p:-1+(4-2*p)*p)); if(p<1)requestAnimationFrame(step); };
+        requestAnimationFrame(step);
+      }
+    })
+  },{threshold:0.2});
+  $$('.num').forEach(c=>io.observe(c));
+})();
+
+/* --- 3. RIBBON MOUSE FOLLOW --- */
+addEventListener('pointermove', e=>{$('.ribbon-inner').style.transform=`translateX(${clamp(((e.clientX/innerWidth)*2-1)*30,-40,40)}px)`});
+
+/* --- 4. SCROLL REVEAL --- */
+(function(){
+  const io=new IntersectionObserver(e=>{
+    e.forEach(x=>{ if(x.isIntersecting){x.target.classList.add('revealed');io.unobserve(x.target);} });
+  },{threshold:0.12});
+  $$('[data-animate]').forEach(el=>io.observe(el));
+})();
+
+/* --- 5. PROCESS SECTION (CROSS-FADE MORPH) --- */
+(function(){
+  const STAGES=[
+    {k:"WIREFRAMING",t:"Wireframing & Structure",l:"Start with user flows & layout blueprints.",b:"Wireframe",bg:"linear-gradient(180deg,#07104f,#0b1280)",img:"4.png"},
+    {k:"DESIGN",t:"Visual Design",l:"High fidelity production-ready UI design.",b:"Design",bg:"linear-gradient(180deg,#4a2aff,#260a9d)",img:"3.png"},
+    {k:"DEVELOPMENT",t:"Development & Build",l:"Frontend + backend engineering.",b:"Development",bg:"linear-gradient(180deg,#021026,#031a4f)",img:"5.png"},
+  ];
+  let idx=0, lock=false;
+  const sec=$('#process'), k=$('#procKicker'), t=$('#procTitle'), l=$('#procLead'), c=$('#procCtaRow'), bdg=$('#procBadge'), d=[...document.querySelectorAll(".proc-dot")];
+  const img1 = $('#procImg1'); const img2 = $('#procImg2');
+  let activeImg = 1;
+  
+  function setStage(i){
+    lock=true;
+    [k,t,l,c,bdg].forEach(e=>e?.classList.remove("active"));
+    const nextImg = (activeImg === 1) ? img2 : img1;
+    const currImg = (activeImg === 1) ? img1 : img2;
+    setTimeout(()=>{
+      if(k)k.textContent=STAGES[i].k; if(t)t.textContent=STAGES[i].t; if(l)l.textContent=STAGES[i].l; if(bdg)bdg.textContent=STAGES[i].b;
+      sec.style.background=STAGES[i].bg;
+      nextImg.src = STAGES[i].img;
+      nextImg.style.zIndex = 2; currImg.style.zIndex = 1;
+      requestAnimationFrame(()=>{
+        nextImg.classList.add('active');
+        setTimeout(()=>{
+          currImg.classList.remove('active'); currImg.style.zIndex = 1;
+          [k,t,l,c,bdg].forEach(e=>e?.classList.add("active"));
+          lock=false;
+        }, 200);
+      });
+      activeImg = (activeImg === 1) ? 2 : 1;
+    }, 200);
+    d.forEach(x=>x.classList.remove("active")); d[i]?.classList.add("active");
+  }
+  sec.addEventListener("wheel", e=>{ if(lock)return; if(e.deltaY>0&&idx<2){e.preventDefault();idx++;setStage(idx);}else if(e.deltaY<0&&idx>0){e.preventDefault();idx--;setStage(idx);} },{passive:false});
+  d.forEach(x=>x.onclick=()=>{idx=+x.dataset.i;setStage(idx)});
+  setStage(0);
+})();
+
+/* --- 6. GLASS WIZARD LOGIC --- */
+let wizStep = 1;
+let wizData = {type:null, budget:null, deadline:null, name:null, phone:null};
+const overlay = $('#modalOverlay');
+const steps = {1:$('#step1'),2:$('#step2'),3:$('#step3'),4:$('#step4')};
+const dashes = {1:$('#dash1'),2:$('#dash2'),3:$('#dash3'),4:$('#dash4')};
+const pBar = $('#progressBar');
+const sView = $('#successView');
+
+// Helper for Netlify Form
+function encode(data) {
+  return Object.keys(data)
+    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+    .join("&");
+}
+
+function openWizard(){
+  wizStep=1; wizData={type:null,budget:null,deadline:null,name:null,phone:null};
+  $('#wizName').value=''; $('#wizPhone').value='';
+  overlay.style.display='flex'; setTimeout(()=>overlay.classList.add('open'),10); document.body.classList.add('modal-open');
+  Object.values(steps).forEach(s=>{s.style.display='none';s.classList.remove('active');s.style.opacity='';s.style.transform='';});
+  steps[1].style.display='flex'; setTimeout(()=>steps[1].classList.add('active'),50);
+  pBar.style.display='flex'; pBar.style.opacity='1';
+  dashes[1].classList.add('active'); dashes[2].classList.remove('active'); dashes[3].classList.remove('active'); dashes[4].classList.remove('active');
+  sView.style.display='none'; sView.classList.remove('active');
+}
+function closeWizard(){
+  overlay.classList.remove('open'); document.body.classList.remove('modal-open'); setTimeout(()=>overlay.style.display='none',300);
+}
+$$('.trigger-wizard').forEach(b=>b.onclick=openWizard);
+$('#closeWizard').onclick=closeWizard;
+$('#closeSuccess').onclick=closeWizard;
+
+window.wizNext = function(target, val){
+  if(wizStep===1) wizData.type=val;
+  if(wizStep===2) wizData.budget=val;
+  if(wizStep===3) wizData.deadline=val;
+  
+  const curr = steps[wizStep];
+  curr.style.opacity='0'; curr.style.transform='translateY(-10px)';
+  setTimeout(()=>{
+    curr.style.display='none'; curr.classList.remove('active');
+    wizStep = target;
+    const next = steps[wizStep];
+    next.style.display='flex';
+    dashes[wizStep].classList.add('active');
+    next.style.opacity='0'; next.style.transform='translateY(10px)';
+    requestAnimationFrame(()=>{ next.classList.add('active'); next.style.opacity='1'; next.style.transform='translateY(0)'; });
+  },200);
+};
+
+window.wizPrev = function(target){
+  dashes[wizStep].classList.remove('active');
+  const curr = steps[wizStep];
+  curr.style.opacity='0'; curr.style.transform='translateY(10px)';
+  setTimeout(()=>{
+    curr.style.display='none'; curr.classList.remove('active');
+    wizStep = target;
+    const prev = steps[wizStep];
+    prev.style.display='flex';
+    prev.style.opacity='0'; prev.style.transform='translateY(-10px)';
+    requestAnimationFrame(()=>{ prev.classList.add('active'); prev.style.opacity='1'; prev.style.transform='translateY(0)'; });
+  },200);
+};
+
+window.wizFinish = function(){
+  const name = $('#wizName').value;
+  const phone = $('#wizPhone').value;
+  if(!name || !phone) { alert('Please enter your Name and Mobile Number.'); return; }
+  
+  wizData.name = name;
+  wizData.phone = phone;
+  
+  const curr = steps[4];
+  curr.style.opacity='0'; pBar.style.opacity='0';
+  
+  fetch("/", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: encode({
+      "form-name": "contact",
+      "Project Type": wizData.type,
+      "Budget Range": wizData.budget,
+      "Deadline": wizData.deadline,
+      "Client Name": wizData.name,
+      "Mobile": wizData.phone
+    })
+  })
+  .then(() => console.log("Netlify Form Submitted"))
+  .catch(error => console.log("Error", error));
+
+  setTimeout(()=>{
+    curr.style.display='none'; curr.classList.remove('active');
+    pBar.style.display='none';
+    sView.style.display='flex'; sView.classList.add('active');
+  },300);
+};
+</script>
+</body>
+</html>
