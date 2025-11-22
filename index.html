@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>ADI DESIGN — Full Stack Agency</title>
 
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -30,7 +31,7 @@
   --proc-ease: cubic-bezier(.22,.9,.35,1);
 
   /* WIZARD VARIABLES */
-  --wiz-bg: rgba(20, 20, 30, 0.75);
+  --wiz-bg: rgba(20, 20, 30, 0.85); /* Slightly darker for mobile legibility */
   --wiz-border: rgba(255, 255, 255, 0.1);
   --wiz-neon: #2ecc71;
   --wiz-icon-bg: rgba(46, 204, 113, 0.15);
@@ -65,8 +66,19 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
 .logo{display:flex;gap:10px;align-items:center;font-family:Montserrat;font-weight:900}
 .logo .mark{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--neon),var(--neon-2));display:grid;place-items:center;color:#051;font-weight:900}
 .navlinks{display:flex;gap:18px;align-items:center}
-.navlinks a{color:rgba(255,255,255,0.95);font-weight:700;text-decoration:none}
-.cta-small{background:var(--neon);color:#051;padding:8px 12px;border-radius:8px;font-weight:800;border:none;cursor:pointer;text-decoration: none;}
+.navlinks a{color:rgba(255,255,255,0.95);font-weight:700;text-decoration:none; font-size: 14px;}
+.cta-small{background:var(--neon);color:#051;padding:8px 12px;border-radius:8px;font-weight:800;border:none;cursor:pointer;text-decoration: none; font-size: 14px;}
+
+/* Mobile Nav Tweaks */
+@media(max-width: 720px) {
+  nav { top: 10px; }
+  .nav-inner { padding: 0 16px; }
+  .navlinks { gap: 12px; }
+  .navlinks a { display: none; } /* Hide text links on small mobile, keep CTA */
+  .navlinks a:last-child, .cta-small { display: block; } /* Ensure CTA is visible */
+  .logo { font-size: 18px; }
+  .logo .mark { width: 32px; height: 32px; font-size: 14px; }
+}
 
 /* =========================
    HERO
@@ -91,7 +103,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   transition:transform .22s var(--ease);
 }
 
-.hero-sub{margin-top:14px;max-width:560px;color:#d8eaff;font-size:15px}
+.hero-sub{margin-top:14px;max-width:560px;color:#d8eaff;font-size:15px; line-height: 1.6;}
 .hero-cta{margin-top:18px;display:flex;gap:12px;align-items:center}
 .btn-primary{background:linear-gradient(90deg,var(--neon),var(--neon-2));color:#051;padding:14px 18px;border-radius:10px;font-weight:900;border:none;cursor:pointer;box-shadow:0 18px 36px rgba(0,0,0,0.45); text-decoration: none; display: inline-block;}
 .btn-ghost{background:transparent;border:2px solid rgba(255,255,255,0.06);padding:12px 16px;border-radius:10px;color:#fff; cursor: pointer; text-decoration: none; display: inline-block;}
@@ -110,6 +122,23 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
 
 .ribbon{margin-top:28px;transform:skewY(-4deg);overflow:visible}
 .ribbon-inner{background:linear-gradient(90deg,var(--neon),var(--neon-2));color:#051;font-family:Montserrat;font-weight:900;padding:14px 0;text-align:center;letter-spacing:2px;border-radius:6px;box-shadow:0 14px 40px rgba(0,0,0,0.35)}
+
+/* Responsive Hero */
+@media(max-width:1100px){
+  .hero-title{ font-size: 80px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 60px; }
+  .stats-vertical { position: static; flex-direction: row; margin-bottom: 20px; gap: 30px; }
+}
+
+@media(max-width:720px){
+  .hero { padding: 100px 0 40px; }
+  .hero-title{font-size:56px; letter-spacing: -1px;}
+  .stats-vertical { display: none; /* Hide stats on mobile for cleaner look or move below */ }
+  .hero-figure { height: 300px; margin-top: 20px; }
+  .hero-cta { flex-wrap: wrap; }
+  .btn-primary, .btn-ghost { flex: 1; text-align: center; padding: 12px; }
+  .ribbon-inner { font-size: 12px; padding: 10px 0; }
+}
 
 /* =========================
    DARK SERVICES
@@ -138,8 +167,15 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
 .ripple{position:relative;overflow:hidden;}
 .ripple::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(217,255,26,0.0);transition:box-shadow .5s}
 .ripple:active::after{box-shadow:0 0 60px 10px rgba(217,255,26,0.08);transition:box-shadow .12s}
-@media(max-width:1100px){.expert-grid{grid-template-columns:1fr 1fr;}.card-center{grid-column:1/-1;}}
-@media(max-width:720px){.hero-grid{grid-template-columns:1fr;}.hero-title{font-size:56px}.expert-grid{grid-template-columns:1fr}.stats-vertical{position:static;display:flex;flex-direction:row;gap:12px;margin-top:8px}}
+
+@media(max-width:1100px){
+  .expert-grid{grid-template-columns:1fr 1fr;}
+  .card-center{grid-column:1/-1;}
+}
+@media(max-width:720px){
+  .expert-grid{grid-template-columns:1fr;}
+  .what-title { font-size: 24px; }
+}
 
 
 /* =========================
@@ -183,10 +219,17 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
 .proc-dot { width: 12px; height: 12px; background: rgba(255,255,255,.22); border-radius: 50%; cursor: pointer; transition: background 0.3s; }
 .proc-dot.active { background: var(--proc-neon); }
 
+@media(max-width:1100px){
+  .process-section { height: auto; padding: 80px 0; }
+  .proc-wrap { grid-template-columns: 1fr; gap: 30px; }
+  .proc-card-holder { height: 400px; width: 100%; }
+  .proc-title { font-size: 36px; }
+}
+
 @media(max-width:720px){ 
-  .proc-wrap { grid-template-columns: 1fr; } 
   .proc-card-holder { height: 260px; }
   .proc-dots { display: none; } 
+  .proc-title { font-size: 32px; }
 }
 
 /* =========================
@@ -195,7 +238,11 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
 .tagline-section { padding: 120px 0 80px; text-align: center; background: transparent; position: relative; }
 .tagline-text { font-family: Montserrat, sans-serif; font-weight: 900; font-size: 56px; line-height: 1.1; color: var(--neon); text-transform: uppercase; letter-spacing: -2px; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.4); }
 .tagline-sub { font-size: 18px; color: #dbe9ff; margin-bottom: 32px; opacity: 0.9; }
-@media(max-width: 720px) { .tagline-text { font-size: 36px; } }
+@media(max-width: 720px) { 
+  .tagline-section { padding: 80px 0 60px; }
+  .tagline-text { font-size: 32px; } 
+  .tagline-sub { font-size: 16px; padding: 0 20px; }
+}
 
 /* ===========================================
    GLASS WIZARD OVERLAY STYLES
@@ -207,6 +254,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   display: none; /* Hidden by default */
   align-items: center; justify-content: center;
   animation: fadeInOverlay 0.3s ease;
+  padding: 20px; /* Added padding for mobile */
 }
 .modal-overlay.open { display: flex; }
 @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
@@ -215,6 +263,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
 .wiz-card {
   position: relative;
   width: 100%; max-width: 440px; height: 650px;
+  max-height: 90vh; /* Ensure it fits on mobile screens */
   background: var(--wiz-bg);
   border: 1px solid var(--wiz-border);
   border-top: 1px solid rgba(255,255,255,0.2);
@@ -225,6 +274,11 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   overflow: hidden;
   animation: slideUpCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+@media(max-width: 480px) {
+  .wiz-card { padding: 30px 20px; height: auto; min-height: 500px; }
+  .wiz-close { top: 15px; right: 15px; }
+}
+
 @keyframes slideUpCard { from { transform: translateY(40px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
 
 /* Close Button */
@@ -312,6 +366,16 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
 </head>
 <body>
 
+<!-- HIDDEN NETLIFY FORM -->
+<form name="contact" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="Project Type" />
+  <input type="text" name="Budget Range" />
+  <input type="text" name="Deadline" />
+  <input type="text" name="Client Name" />
+  <input type="text" name="Mobile" />
+</form>
+
+<!-- NAV -->
 <nav aria-label="Primary">
   <div class="nav-inner wrap">
     <div class="logo"><div class="mark">A</div>ADI DESIGN</div>
@@ -324,8 +388,10 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero" id="top" aria-label="Hero">
   <div class="hero-grid wrap">
+    <!-- LEFT -->
     <div style="position:relative;">
       <div class="stats-vertical" aria-hidden="true">
         <div class="stat-col"><span class="num" data-target="500">0</span><small>Happy Clients</small></div>
@@ -348,6 +414,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
         <div class="play" title="Play demo"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"></path></svg></div>
       </div>
     </div>
+    <!-- RIGHT -->
     <div class="hero-figure" id="heroFigure" aria-hidden="true">
       <div class="photo"></div>
       <div class="hero-mini">
@@ -366,6 +433,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   <div class="ribbon"><div class="ribbon-inner">BRANDING • GRAPHIC DESIGN • WEB DESIGN • DIGITAL MARKETING</div></div>
 </section>
 
+<!-- EXPERTISE -->
 <section class="section-dark" id="services" aria-label="What we do - Expertise">
   <div class="dark-wrap">
     <div class="what-header">
@@ -375,6 +443,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
     <h2 class="what-title">DESIGNING FOR SEAMLESS AND<br>ENJOYABLE INTERACTIONS.</h2>
     <div class="expert-grid" id="expertGrid">
       
+      <!-- Card 1 -->
       <div class="card-expert reveal-up" data-animate onclick="window.open('https://directdesign.netlify.app', '_blank')" style="cursor:pointer">
         <div class="card-thumb"><img src="1.png" style="width:100%;height:100%;object-fit:cover"></div>
         <div class="card-title">BRAND BUILDING & STRATEGY.</div>
@@ -382,6 +451,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
         <div style="display:flex;justify-content:flex-end"><button class="circle-btn ripple"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#051" d="M8 5v14l11-7z"></path></svg></button></div>
       </div>
 
+      <!-- Card 2 -->
       <div class="card-expert card-center reveal-up" data-animate onclick="window.open('https://restrofy.netlify.app', '_blank')" style="cursor:pointer">
         <div class="card-thumb"><img src="2.png" style="width:100%;height:100%;object-fit:cover"></div>
         <div class="card-title" style="color:#fff">CREATIVE DIGITAL SOLUTION.</div>
@@ -389,6 +459,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
         <div style="display:flex;justify-content:flex-end"><button class="circle-btn ripple"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#051" d="M8 5v14l11-7z"></path></svg></button></div>
       </div>
 
+      <!-- Card 3 -->
       <div class="card-expert reveal-up" data-animate onclick="window.open('https://restrofy.netlify.app', '_blank')" style="cursor:pointer">
         <div class="card-thumb"><img src="3.jpeg" style="width:100%;height:100%;object-fit:cover"></div>
         <div class="card-title">MARKETING & CAMPAIGN.</div>
@@ -400,6 +471,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   </div>
 </section>
 
+<!-- PROCESS (Cross-fade) -->
 <section class="process-section" id="process">
   <div class="proc-wrap">
     <div>
@@ -427,6 +499,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   </div>
 </section>
 
+<!-- TAGLINE -->
 <section class="tagline-section">
   <div class="wrap">
     <h2 class="tagline-text">YOUR VISION.<br>OUR CODE.<br>INFINITE POSSIBILITIES.</h2>
@@ -435,13 +508,16 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer style="margin-top:40px;padding-bottom:80px">
   <div class="wrap" style="text-align:center;color:#b7c9ff">© 2025 ADI DESIGN — From idea to deployment</div>
 </footer>
 
+<!-- MODAL WIZARD -->
 <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
   <div class="wiz-card">
     <button class="wiz-close" id="closeWizard" aria-label="Close">×</button>
+    <!-- Progress Bar (4 steps) -->
     <div class="progress-container" id="progressBar">
       <div class="dash active" id="dash1"></div>
       <div class="dash" id="dash2"></div>
@@ -449,6 +525,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
       <div class="dash" id="dash4"></div>
     </div>
 
+    <!-- STEP 1: Type -->
     <div id="step1" class="step-container active">
       <div class="step-head"><h2>Select Project Type</h2><p>Which digital solution do you need?</p></div>
       <div class="options-list">
@@ -459,6 +536,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
       <div class="bottom-nav"><button class="nav-btn hidden">Back</button></div>
     </div>
 
+    <!-- STEP 2: Budget (INR) -->
     <div id="step2" class="step-container">
       <div class="step-head"><h2>Estimated Budget</h2><p>Fair pricing (INR)</p></div>
       <div class="options-list">
@@ -469,6 +547,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
       <div class="bottom-nav"><button class="nav-btn" onclick="wizPrev(1)"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L10.83 12l4.58 4.59L14 18l-6-6 6-6 1.41 1.41z"/></svg> Back</button></div>
     </div>
 
+    <!-- STEP 3: Deadline -->
     <div id="step3" class="step-container">
       <div class="step-head"><h2>Deadline</h2><p>When do you need this delivered?</p></div>
       <div class="options-list">
@@ -479,6 +558,7 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
       <div class="bottom-nav"><button class="nav-btn" onclick="wizPrev(2)"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L10.83 12l4.58 4.59L14 18l-6-6 6-6 1.41 1.41z"/></svg> Back</button></div>
     </div>
 
+    <!-- STEP 4: Contact Details -->
     <div id="step4" class="step-container">
       <div class="step-head"><h2>Almost Done</h2><p>How can we reach you?</p></div>
       <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:8px;">
@@ -497,6 +577,9 @@ nav{position:fixed;top:18px;left:0;right:0;z-index:1200}
   </div>
 </div>
 
+<!-- =========================
+     SCRIPTS
+     ========================= -->
 <script>
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -658,7 +741,7 @@ window.wizFinish = function(){
           'Accept': 'application/json'
       },
       body: JSON.stringify({
-          _subject: "New Project Request (ADI DESIGN)",
+          _subject: "New Client: " + wizData.name,
           "Project Type": wizData.type,
           "Budget Range": wizData.budget,
           "Deadline": wizData.deadline,
@@ -673,7 +756,8 @@ window.wizFinish = function(){
   setTimeout(()=>{
     curr.style.display='none'; curr.classList.remove('active');
     pBar.style.display='none';
-    sView.style.display='flex'; sView.classList.add('active');
+    sView.style.display='flex';
+    sView.classList.add('active');
   },300);
 };
 </script>
